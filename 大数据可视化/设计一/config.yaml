@@ -1,0 +1,22 @@
+# 城市空气质量(AQI)实时监测与预测分析系统 - 全局配置
+
+database:
+  # 数据库路径（相对项目根目录）
+  path: "data/aqi.db"
+
+app:
+  # 默认显示的城市
+  default_city: "北京"
+  # 默认显示过去多少天的数据
+  default_days_range: 365
+  # GUI 主题模式 (system, dark, light)
+  appearance_mode: "dark"
+  # 窗口默认大小
+  window_size: "1100x650"
+
+deepseek:
+  api_key: "" # 请在此处填入您的 DeepSeek API Key
+  base_url: "https://api.deepseek.com"
+  # 国内用户如果连不上，请在此处填入你的本地代理，例如：
+  # proxy: "http://127.0.0.1:7890"
+  # proxy: http://127.0.0.1:7897

@@ -1,0 +1,6 @@
+{
+  "name": "NutriAI",
+  "description": "An interactive AI-powered nutrition tracker with automated calorie and macro estimation via Gemini API and local SQL Room database storage.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

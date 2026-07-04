@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>徐州市交通数据详情大屏</title>
+    <link rel="stylesheet" href="./css/dashboard.css" />
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+</head>
+
+<body class="detail-page">
+    <div class="app-shell">
+        <div class="ambient ambient-a"></div>
+        <div class="ambient ambient-b"></div>
+        <div class="ambient ambient-c"></div>
+
+        <header class="panel topbar">
+            <div class="title-block">
+                <p class="eyebrow">Traffic Analytics Suite</p>
+                <h1>徐州市交通数据详情大屏</h1>
+                <p class="subtitle">实时路段流量、趋势、仪表盘与滚动表格</p>
+            </div>
+            <div class="clock-block">
+                <div class="clock-actions">
+                    <a class="page-switch" href="./index.html">返回主页</a>
+                    <div class="status-pill" id="status-badge">系统就绪</div>
+                </div>
+                <div class="clock-card">
+                    <span>当前系统时间</span>
+                    <strong id="current-time">--</strong>
+                </div>
+            </div>
+        </header>
+
+        <section class="dashboard-grid detail-grid">
+            <article class="panel chart-card chart-card-wide">
+                <div class="card-header">
+                    <div>
+                        <h2>实时路段流量柱状图</h2>
+                        <p>每 5 秒刷新一次，颜色由绿到红表示流量强度</p>
+                    </div>
+                </div>
+                <div id="bar-chart" class="chart-area"></div>
+            </article>
+
+            <article class="panel chart-card chart-card-wide">
+                <div class="card-header">
+                    <div>
+                        <h2>24 小时交通流量趋势</h2>
+                        <p>5 分钟采样总流量随时间变化，2 分钟刷新一次</p>
+                    </div>
+                </div>
+                <div id="trend-chart" class="chart-area"></div>
+            </article>
+
+            <article class="panel chart-card">
+                <div class="card-header">
+                    <div>
+                        <h2>速度 / 拥堵仪表盘</h2>
+                        <p>展示当前加权平均速度与整体拥堵指数</p>
+                    </div>
+                </div>
+                <div id="gauge-chart" class="chart-area gauge-area"></div>
+            </article>
+
+            <article class="panel chart-card table-card">
+                <div class="card-header">
+                    <div>
+                        <h2>最近数据滚动表格</h2>
+                        <p>展示每个路段最新一条记录</p>
+                    </div>
+                </div>
+                <div class="table-wrap">
+                    <table class="rolling-table">
+                        <thead>
+                            <tr>
+                                <th>路段名</th>
+                                <th>流量</th>
+                                <th>速度</th>
+                                <th>时间</th>
+                            </tr>
+                        </thead>
+                        <tbody id="latest-table-body"></tbody>
+                    </table>
+                </div>
+            </article>
+        </section>
+    </div>
+
+    <script type="module" src="./js/detail.js"></script>
+</body>
+
+</html>

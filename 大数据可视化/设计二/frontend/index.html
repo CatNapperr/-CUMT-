@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>智慧城市交通流量实时监控大屏</title>
+    <link rel="stylesheet" href="./css/dashboard.css" />
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+</head>
+
+<body class="home-page">
+    <div class="app-shell">
+        <div class="ambient ambient-a"></div>
+        <div class="ambient ambient-b"></div>
+        <div class="ambient ambient-c"></div>
+
+        <header class="panel topbar">
+            <div class="title-block">
+                <p class="eyebrow">Urban Traffic Intelligence Center</p>
+                <h1>智慧城市交通流量实时监控大屏</h1>
+                <p class="subtitle">徐州市路网总览 · 地图联动与交通研判</p>
+            </div>
+            <div class="clock-block">
+                <div class="clock-actions">
+                    <button id="qa-open" class="qa-button" type="button">AI 交通问答</button>
+                    <a class="page-switch" href="./detail.html">图表详情</a>
+                    <div class="status-pill" id="status-badge">系统就绪</div>
+                </div>
+                <div class="clock-card">
+                    <span>当前系统时间</span>
+                    <strong id="current-time">--</strong>
+                </div>
+            </div>
+        </header>
+
+        <section class="kpi-grid">
+            <article class="panel kpi-card accent-total">
+                <div class="kpi-label">总车流量</div>
+                <div class="kpi-value" id="kpi-total-volume">0</div>
+                <div class="kpi-footnote">所有路段最新 volume 之和</div>
+            </article>
+            <article class="panel kpi-card accent-speed">
+                <div class="kpi-label">平均速度</div>
+                <div class="kpi-value" id="kpi-average-speed">0.00</div>
+                <div class="kpi-footnote">按流量加权计算</div>
+            </article>
+            <article class="panel kpi-card accent-congestion">
+                <div class="kpi-label">整体拥堵指数</div>
+                <div class="kpi-value" id="kpi-congestion-index">0.00</div>
+                <div class="kpi-footnote">0 ~ 10 区间</div>
+            </article>
+        </section>
+
+        <section class="geo-grid home-geo-grid">
+            <article class="panel map-card">
+                <div class="card-header">
+                    <div>
+                        <h2>徐州市交通态势地图</h2>
+                        <p>基于徐州行政边界的实时路段热力与点位分布</p>
+                    </div>
+                </div>
+                <div id="xuzhou-map" class="chart-area map-area"></div>
+            </article>
+
+            <div class="insight-stack">
+                <article class="panel insight-card">
+                    <div class="card-header">
+                        <div>
+                            <h2>交通预警</h2>
+                            <p>根据当前与历史变化生成风险提示</p>
+                        </div>
+                    </div>
+                    <ul id="alert-list" class="alert-list"></ul>
+                </article>
+
+                <article class="panel insight-card">
+                    <div class="card-header">
+                        <div>
+                            <h2>绕行推荐</h2>
+                            <p>根据徐州路网与实时路况生成路径建议</p>
+                        </div>
+                    </div>
+                    <div class="route-controls">
+                        <label class="route-field">
+                            <span>起点</span>
+                            <select id="route-origin" class="route-select"></select>
+                        </label>
+                        <label class="route-field">
+                            <span>终点</span>
+                            <select id="route-destination" class="route-select"></select>
+                        </label>
+                        <button id="route-refresh" class="route-button" type="button">更新推荐</button>
+                    </div>
+                    <div id="route-list" class="route-list"></div>
+                </article>
+            </div>
+        </section>
+    </div>
+
+    <div id="qa-modal" class="qa-modal" hidden>
+        <div class="qa-backdrop" data-qa-close="true"></div>
+        <section class="qa-dialog" role="dialog" aria-modal="true" aria-labelledby="qa-title">
+            <header class="qa-header">
+                <div>
+                    <p class="qa-eyebrow">AI Traffic Assistant</p>
+                    <h2 id="qa-title">AI 交通问答助手</h2>
+                </div>
+                <button id="qa-close" class="qa-close" type="button" aria-label="关闭问答窗口">×</button>
+            </header>
+
+            <div class="qa-intro">
+                你可以直接问我当前路况、最堵区县、某个区怎么走，或者让我要一段简短的交通概览。
+            </div>
+
+            <div id="qa-messages" class="qa-messages" aria-live="polite"></div>
+
+            <div class="qa-suggestions" aria-label="快捷提问">
+                <button class="qa-chip" type="button" data-qa-question="今天哪个区最堵">今天哪个区最堵</button>
+                <button class="qa-chip" type="button" data-qa-question="鼓楼区到铜山区怎么走">鼓楼区到铜山区怎么走</button>
+                <button class="qa-chip" type="button" data-qa-question="新沂市现在情况如何">新沂市现在情况如何</button>
+                <button class="qa-chip" type="button" data-qa-question="给我一个当前交通概览">当前交通概览</button>
+            </div>
+
+            <form id="qa-form" class="qa-form">
+                <input id="qa-input" class="qa-input" type="text" placeholder="例如：徐州市当前哪个区最堵？" autocomplete="off" />
+                <button class="qa-send" type="submit">发送</button>
+            </form>
+        </section>
+    </div>
+
+    <script type="module" src="./js/main.js"></script>
+</body>
+
+</html>

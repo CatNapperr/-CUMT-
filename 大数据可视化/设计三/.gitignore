@@ -1,0 +1,51 @@
+# IDE and editor
+.idea/
+*.iml
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+env/
+
+# FastAPI / backend runtime artifacts
+backend/.env
+backend/.env.*
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+# Android / Gradle
+*.apk
+*.aab
+*.dex
+*.log
+.gradle/
+**/build/
+local.properties
+captures/
+externalNativeBuild/
+.cxx/
+debug.keystore
+
+# Frontend secrets and generated files
+frontend/.env
+frontend/.env.*
+frontend/debug.keystore
+
+# Archives and miscellaneous build output
+dist/
+out/
+tmp/
+temp/
