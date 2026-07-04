@@ -1,0 +1,146 @@
+Cat12 12类猫图像分类实验
+=========================
+
+这是一个基于 PaddleClas 的 12 类猫图像分类项目，包含数据整理、模型训练、测试集预测、验证集评估和结果可视化的完整流程。默认使用高容量的 CSWinTransformer_large_384，也支持 SwinTransformer_large_patch4_window12_384 作为备选模型。
+
+项目结构
+--------
+
+- cat_12_train/：训练图片目录，结构与数据集保持一致
+- cat_12_test/：测试图片目录，结构与数据集保持一致
+- paddleclas_data/：脚本生成的训练、验证和测试列表文件
+- configs/cat12_cswin_large_384.yaml：PaddleClas 训练配置
+- tools/prepare_cat12_paddleclas.py：生成 PaddleClas 数据列表
+- tools/train_cat12_cswin.py：训练与验证
+- tools/predict_cat12_cswin.py：测试集预测或验证集评估
+- tools/plot_cat12_results.py：绘制训练曲线和评估图表
+
+环境要求
+--------
+
+- Python 3.10 或相近版本
+- PaddlePaddle GPU 版优先，若没有 CUDA 可切换到 CPU
+- 依赖见根目录的 requirements.txt
+
+建议先自己创建一个独立环境，再安装依赖：
+
+```powershell
+python -m venv .venv_paddleclas
+.\.venv_paddleclas\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+如果你的机器需要安装指定版本的 PaddlePaddle GPU/CPU 包，请先到飞桨官网查看与你系统和 CUDA 匹配的安装命令，再执行依赖安装。
+
+数据格式
+--------
+
+如果你已经有训练标签文件，建议准备一个根目录下的 train_list.txt，每一行格式如下：
+
+```text
+相对图片路径 标签编号
+```
+
+例如：
+
+```text
+cat_12_train/cat_12_train/class_0/0001.jpg 0
+cat_12_train/cat_12_train/class_1/0002.jpg 1
+```
+
+数据集本项目不内置，请自行到飞桨官网或实验要求中提供的数据源下载。下载后按仓库现有结构放置即可：训练图片放在 cat_12_train/cat_12_train/ 下，测试图片放在 cat_12_test/cat_12_test/ 下。
+
+脚本会按照这个结构生成 PaddleClas 需要的列表文件。
+
+快速开始
+--------
+
+1. 生成 PaddleClas 数据列表
+
+```powershell
+python tools/prepare_cat12_paddleclas.py --root .
+```
+
+运行后会在 paddleclas_data/ 下生成：
+
+- train_list.txt
+- val_list.txt
+- train_full_list.txt
+- test_images.txt
+- label_list.txt
+
+2. 训练模型
+
+```powershell
+python tools/train_cat12_cswin.py --root . --model cswin_large_384
+```
+
+常用参数：
+
+- --model cswin_large_384 或 --model swin_large_384_22kto1k
+- --device gpu 或 --device cpu
+- --epochs 36
+- --freeze-epochs 5
+- --batch-size 1
+- --accum-steps 4
+
+默认输出目录为 output/cat12_cswin_large_384/，会保存：
+
+- best.pdparams
+- last.pdparams
+- metrics.csv
+- 训练过程中的 checkpoint 文件
+
+3. 测试集预测
+
+```powershell
+python tools/predict_cat12_cswin.py --root . --weights cswin_large_384=output/cat12_cswin_large_384/best.pdparams
+```
+
+默认生成 result.csv，格式为：
+
+```text
+文件名,预测类别
+```
+
+4. 验证集评估
+
+```powershell
+python tools/predict_cat12_cswin.py --root . --eval-list paddleclas_data/val_list.txt --weights cswin_large_384=output/cat12_cswin_large_384/best.pdparams
+```
+
+评估模式会额外输出：
+
+- val_predictions.csv
+- val_metrics.json
+- confusion_matrix.csv
+- class_metrics.csv
+
+5. 绘制训练曲线和评估图
+
+```powershell
+python tools/plot_cat12_results.py --metrics-csv output/cat12_cswin_large_384/metrics.csv
+```
+
+如果同时有验证评估结果，可以一起绘图：
+
+```powershell
+python tools/plot_cat12_results.py --metrics-csv output/cat12_cswin_large_384/metrics.csv --confusion-csv confusion_matrix.csv --class-metrics-csv class_metrics.csv
+```
+
+训练流程说明
+-----------
+
+训练脚本默认采用两阶段策略：先冻结骨干网络，只训练分类头；再解冻全网络进行微调。验证集会在每个 epoch 后自动评估，并记录 top1、top3、loss 和学习率。
+
+默认超参数已经针对当前实验做了偏保守的设置，适合先跑通流程再根据显存和效果微调。
+
+结果说明
+--------
+
+- output/：训练和 checkpoint 输出
+- result/：最终提交或预测结果
+- paddleclas_data/：中间数据列表
+
+如果你想先做一次快速冒烟测试，可以在训练脚本中加上 --smoke-test，它会只跑极少量 batch，方便检查数据和环境是否正常。

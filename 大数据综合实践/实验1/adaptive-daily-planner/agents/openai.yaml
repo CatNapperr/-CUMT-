@@ -1,0 +1,14 @@
+﻿interface:
+  display_name: "Adaptive Daily Planner"
+  short_description: "Batch adaptive daily plans with Super Productivity"
+  default_prompt: "Use $adaptive-daily-planner to create an adaptive daily plan for my IELTS goal and put the next 7 days into Super Productivity."
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "super-productivity"
+      description: "Submits adaptive plan batches and updates Super Productivity projects, tasks, tags, and notifications."
+      transport: "stdio"
+
+policy:
+  allow_implicit_invocation: true
